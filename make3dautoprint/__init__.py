@@ -5,6 +5,7 @@ import octoprint.plugin
 import flask, json
 from octoprint.server.util.flask import restricted_access
 from octoprint.events import eventManager, Events
+import urllib
 
 class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
                             octoprint.plugin.TemplatePlugin,
@@ -193,8 +194,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         self._settings.set(["cp_queue"], json.dumps(queue))
         self._settings.save()
         self._logger.info("Automatic Add worked!")
-        add_queue()
-        remove_queue()
+        urllib.urlopen('http://octopi.local/plugin/make3dautoprint/static/js/make3dautoprint.js')
     
     @octoprint.plugin.BlueprintPlugin.route("/removequeue", methods=["DELETE"])
     @restricted_access
