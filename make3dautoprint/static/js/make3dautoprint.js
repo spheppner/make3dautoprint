@@ -6,7 +6,7 @@
  */
 
 $(function() {
-	function ContinuousPrintViewModel(parameters) {
+	function Make3DAutoPrintViewModel(parameters) {
 		var self = this;
 		self.params = parameters;
 
@@ -24,7 +24,7 @@ $(function() {
 		self.loadQueue = function() {
 			$('#queue_list').html("");
 			$.ajax({
-				url: "plugin/continuousprint/queue",
+				url: "plugin/make3dautoprint/queue",
 				type: "GET",
 				dataType: "json",
 				headers: {
@@ -140,7 +140,7 @@ $(function() {
 
 		self.addToQueue = function(data) {
 			$.ajax({
-				url: "plugin/continuousprint/addqueue",
+				url: "plugin/make3dautoprint/addqueue",
 				type: "POST",
 				dataType: "text",
 				headers: {
@@ -158,7 +158,7 @@ $(function() {
 		
 		self.moveUp = function(data) {
 			$.ajax({
-				url: "plugin/continuousprint/queueup?index=" + data,
+				url: "plugin/make3dautoprint/queueup?index=" + data,
 				type: "GET",
 				dataType: "json",
 				headers: {"X-Api-Key":UI_API_KEY},
@@ -173,7 +173,7 @@ $(function() {
 		
 		self.moveDown = function(data) {
 			$.ajax({
-				url: "plugin/continuousprint/queuedown?index=" + data,
+				url: "plugin/make3dautoprint/queuedown?index=" + data,
 				type: "GET",
 				dataType: "json",
 				headers: {"X-Api-Key":UI_API_KEY},
@@ -188,7 +188,7 @@ $(function() {
 		
 		self.removeFromQueue = function(data) {
 			$.ajax({
-				url: "plugin/continuousprint/removequeue?index=" + data,
+				url: "plugin/make3dautoprint/removequeue?index=" + data,
 				type: "DELETE",
 				dataType: "text",
 				headers: {
@@ -206,7 +206,7 @@ $(function() {
 		self.startQueue = function() {
 			self.is_paused(false);
 			$.ajax({
-				url: "plugin/continuousprint/startqueue",
+				url: "plugin/make3dautoprint/startqueue",
 				type: "GET",
 				dataType: "json",
 				headers: {
@@ -219,7 +219,7 @@ $(function() {
 		self.resumeQueue = function() {
 			self.is_paused(false)
 			$.ajax({
-				url: "plugin/continuousprint/resumequeue",
+				url: "plugin/make3dautoprint/resumequeue",
 				type: "GET",
 				dataType: "json",
 				headers: {
@@ -276,7 +276,7 @@ $(function() {
 	// information to the global variable OCTOPRINT_VIEWMODELS
 	OCTOPRINT_VIEWMODELS.push([
 		// This is the constructor to call for instantiating the plugin
-		ContinuousPrintViewModel,
+		Make3DAutoPrintViewModel,
 
 		// This is a list of dependencies to inject into the plugin, the order which you request
 		// here is the order in which the dependencies will be injected into your view model upon
