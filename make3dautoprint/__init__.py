@@ -172,11 +172,10 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
     def add_queue(self, manual=True, payload={}):
         if manual is True:
             queue = json.loads(self._settings.get(["cp_queue"]))
-            queue.append(dict(
+            queue.insert(len(queue)-1, dict(
                 name=flask.request.form["name"],
                 path=flask.request.form["path"],
-                sd=flask.request.form["sd"],
-                priority=1
+                sd=flask.request.form["sd"]
             ))
             self._settings.set(["cp_queue"], json.dumps(queue))
             self._settings.save()
@@ -184,11 +183,10 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
             return flask.make_response("success", 200)
         else:
             queue = json.loads(self._settings.get(["cp_queue"]))
-            queue.append(dict(
+            queue.insert(0, dict(
                 name=payload["name"],
                 path=payload["path"],
-                sd=[True if payload["target"] == "sdcard" else False],
-                priority=payload["name"].split(".")[len(payload["name"].split("."))-2][-5]
+                sd=[True if payload["target"] == "sdcard" else False]
             ))
             self._settings.set(["cp_queue"], json.dumps(queue))
             self._settings.save()
