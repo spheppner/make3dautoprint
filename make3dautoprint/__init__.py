@@ -169,28 +169,28 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
             
     @octoprint.plugin.BlueprintPlugin.route("/addqueue", methods=["POST"])
     @restricted_access
-    def add_queue(self, manual=True, payload={}):
-        if manual is True:
-            queue = json.loads(self._settings.get(["cp_queue"]))
-            queue.insert(len(queue)-1, dict(
-                name=flask.request.form["name"],
-                path=flask.request.form["path"],
-                sd=flask.request.form["sd"]
-            ))
-            self._settings.set(["cp_queue"], json.dumps(queue))
-            self._settings.save()
-            self._logger.info("Manual Add worked!")
-            return flask.make_response("success", 200)
-        else:
-            queue = json.loads(self._settings.get(["cp_queue"]))
-            queue.insert(0, dict(
-                name=payload["name"],
-                path=payload["path"],
-                sd=[True if payload["target"] == "sdcard" else False]
-            ))
-            self._settings.set(["cp_queue"], json.dumps(queue))
-            self._settings.save()
-            self._logger.info("Automatic Add worked!")
+    def add_queue(self):
+		queue = json.loads(self._settings.get(["cp_queue"]))
+		queue.insert(len(queue)-1, dict(
+			name=flask.request.form["name"],
+			path=flask.request.form["path"],
+			sd=flask.request.form["sd"]
+		))
+		self._settings.set(["cp_queue"], json.dumps(queue))
+		self._settings.save()
+		self._logger.info("Manual Add worked!")
+		return flask.make_response("success", 200)
+
+	def auto_add_queue(self, manual=True, payload={}):
+		queue = json.loads(self._settings.get(["cp_queue"]))
+		queue.insert(0, dict(
+			name=payload["name"],
+			path=payload["path"],
+			sd=[True if payload["target"] == "sdcard" else False]
+		))
+		self._settings.set(["cp_queue"], json.dumps(queue))
+		self._settings.save()
+		self._logger.info("Automatic Add worked!")
     
     @octoprint.plugin.BlueprintPlugin.route("/removequeue", methods=["DELETE"])
     @restricted_access
