@@ -23,8 +23,8 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
     def get_settings_defaults(self):
         return dict(
             cp_queue="[]",
-            cp_start_queueing_time="0800"
-            cp_stop_queueing_time="2100"
+            cp_start_queueing_time="0800",
+            cp_stop_queueing_time="2100",
             cp_queue_finished="M18 ; disable steppers\nM104 T0 S0 ; extruder heater off\nM140 S0 ; heated bed heater off\nM300 S880 P300 ; beep to show its finished"
         )
 
