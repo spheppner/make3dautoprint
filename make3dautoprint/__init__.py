@@ -44,7 +44,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
                 self.complete_print(payload)
                 
         if event == Events.UPLOAD:
-            self._logger.info("Upload Event detected " + payload["name"].split(".")[len(payload["name"].split("."))-1][-4:])
+            self._logger.info("Upload Event detected")
             if payload["name"].split(".")[len(payload["name"].split("."))-2][-4:] == "make":
                 self._logger.info("make in name detected")
                 self.add_queue(False, payload)
@@ -188,7 +188,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
                 name=payload["name"],
                 path=payload["path"],
                 sd=[True if payload["target"] == "sdcard" else False],
-                priority=payload["name"].split(".")[0][-5]
+                priority=payload["name"].split(".")[len(payload["name"].split("."))-2][-5]
             ))
             self._settings.set(["cp_queue"], json.dumps(queue))
             self._settings.save()
