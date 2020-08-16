@@ -45,7 +45,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
                 
         if event == Events.UPLOAD:
             self._logger.info("Upload Event detected " + payload["name"].split(".")[len(payload["name"].split("."))-1][-4:])
-            if payload["name"].split(".")[len(payload["name"].split("."))-1][-4:] == "make":
+            if payload["name"].split(".")[len(payload["name"].split("."))-2][-4:] == "make":
                 self._logger.info("make in name detected")
                 self.add_queue(False, payload)
         
