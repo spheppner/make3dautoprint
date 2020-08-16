@@ -191,6 +191,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         self._settings.set(["cp_queue"], json.dumps(queue))
         self._settings.save()
         self._logger.info("Automatic Add worked!")
+        return flask.jsonify(queue=queue)
     
     @octoprint.plugin.BlueprintPlugin.route("/removequeue", methods=["DELETE"])
     @restricted_access
