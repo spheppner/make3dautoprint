@@ -47,7 +47,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
             self._logger.info("Upload Event detected")
             if payload["name"].split(".")[len(payload["name"].split("."))-2][-4:] == "make":
                 self._logger.info("make in name detected")
-                self.add_queue(False, payload)
+                self.auto_add_queue(False, payload)
         
         # On fail stop all prints
         if event == Events.PRINT_FAILED or event == Events.PRINT_CANCELLED:
@@ -171,7 +171,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
     @restricted_access
     def add_queue(self):
 		queue = json.loads(self._settings.get(["cp_queue"]))
-		queue.insert(len(queue)-1, dict(
+		queue.insert(len(queue), dict(
 			name=flask.request.form["name"],
 			path=flask.request.form["path"],
 			sd=flask.request.form["sd"]
