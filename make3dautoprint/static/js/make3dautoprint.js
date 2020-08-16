@@ -1,7 +1,7 @@
 /*
- * View model for OctoPrint-Print-Queue
+ * View model for OctoPrint-Make3D-Print-Queue
  *
- * Author: Michael New
+ * Author: Simon Heppner
  * License: AGPLv3
  */
 
