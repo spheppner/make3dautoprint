@@ -34,7 +34,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
     ##~~ StartupPlugin mixin
     def on_after_startup(self):
         self._logger.info("Make3D AutoPrint Plugin initialized!")
-		# plugin hat gestartet
+        # plugin hat gestartet
     
     
     
