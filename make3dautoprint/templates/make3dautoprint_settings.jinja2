@@ -22,14 +22,14 @@
         <label class="control-label">Time to start queue automatically</label>
         <small style="font-size: 0.8em"><b>Note:</b> please use format: 0800 for 08:00 and 2400 for 24:00</small>
         <div class="controls">
-            <input class="input-mini text-right" type="number" data-bind="value: settings.plugins.make3autoprint.cp_start_queueing_time, enable: settings.plugins.make3dautoprint.cp_start_queue_automatically"/>
+            <textarea class="noresize" data-bind="value: settings.plugins.make3dautoprint.cp_start_queueing_time, enable: settings.plugins.make3dautoprint.cp_start_queue_automatically"></textarea>
         </div>
     </div>
     <div class="control-group">
         <label class="control-label">Time to stop queue automatically</label>
         <small style="font-size: 0.8em"><b>Note:</b> please use format: 0800 for 08:00 and 2400 for 24:00</small>
         <div class="controls">
-            <input class="input-mini text-right" type="number" data-bind="value: settings.plugins.make3autoprint.cp_stop_queueing_time, enable: settings.plugins.make3dautoprint.cp_start_queue_automatically"/>
+            <textarea class="noresize" data-bind="value: settings.plugins.make3dautoprint.cp_stop_queueing_time, enable: settings.plugins.make3dautoprint.cp_start_queue_automatically"></textarea>
         </div>
     </div>
 </form>
