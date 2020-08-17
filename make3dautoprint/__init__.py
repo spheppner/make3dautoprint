@@ -24,8 +24,8 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         return dict(
             cp_queue="[]",
             cp_start_queue_automatically=False, # soll die queue zu den eingestellten Zeiten automatisch starten? (Checkbox in settings)
-            cp_start_queueing_time=0800, # -> hat derzeit noch keinen effekt (ist eines der issues)
-            cp_stop_queueing_time=2100, # -> hat derzeit noch keinen effekt (ist eines der issues)
+            cp_start_queueing_time="0800", # -> hat derzeit noch keinen effekt (ist eines der issues)
+            cp_stop_queueing_time="2100", # -> hat derzeit noch keinen effekt (ist eines der issues)
             cp_queue_finished="M18 ; disable steppers\nM104 T0 S0 ; extruder heater off\nM140 S0 ; heated bed heater off\nM300 S880 P300 ; beep to show its finished"
         )
 
@@ -251,30 +251,30 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         return dict(
             js=["js/make3dautoprint.js"]
         )
-	def get_update_information(self):
-		return dict(
-			make3dautoprint=dict(
-				displayName="Make3D AutoPrint Plugin",
-				displayVersion=self._plugin_version,
+    def get_update_information(self):
+        return dict(
+            make3dautoprint=dict(
+                displayName="Make3D AutoPrint Plugin",
+                displayVersion=self._plugin_version,
 
-				type="github_release",
-				user="spheppner",
-				repo="make3dautoprint",
-				current=self._plugin_version,
+                type="github_release",
+                user="spheppner",
+                repo="make3dautoprint",
+                current=self._plugin_version,
 
-				pip="https://github.com/spheppner/make3dautoprint/archive/{target_version}.zip"
-			)
-		)
+                pip="https://github.com/spheppner/make3dautoprint/archive/{target_version}.zip"
+            )
+        )
 
 
 __plugin_name__ = "Make3D AutoPrint Plugin"
 __plugin_pythoncompat__ = ">=2.7,<4" # python 2 and 3
 
 def __plugin_load__():
-	global __plugin_implementation__
-	__plugin_implementation__ = Make3dAutoPrintPlugin()
+    global __plugin_implementation__
+    __plugin_implementation__ = Make3dAutoPrintPlugin()
 
-	global __plugin_hooks__
-	__plugin_hooks__ = {
-		"octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information
-	}
+    global __plugin_hooks__
+    __plugin_hooks__ = {
+        "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information
+    }
