@@ -47,12 +47,12 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
                 self.complete_print(payload)
         
         if event == "FileRemoved":
-			queue = json.loads(self._settings.get(["cp_queue"]))
-			self._logger.info("File removed")
-			for queue_item in queue:
-				if payload["path"] == queue_item["path"]
-					queue.pop(queue.index(queue_item))
-			self._settings.set(["cp_queue"], json.dumps(queue))
+            queue = json.loads(self._settings.get(["cp_queue"]))
+            self._logger.info("File removed")
+            for queue_item in queue:
+                if payload["path"] == queue_item["path"]
+                    queue.pop(queue.index(queue_item))
+            self._settings.set(["cp_queue"], json.dumps(queue))
             self._settings.save()
             self._plugin_manager.send_plugin_message(self._identifier, dict(type="reload", msg=""))
             
