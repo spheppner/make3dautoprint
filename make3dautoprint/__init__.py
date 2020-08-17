@@ -17,10 +17,6 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
     print_history = []
     enabled = False
     paused = False
-    
-    while True:
-        pass
-
 
     ##~~ SettingsPlugin mixin
     def get_settings_defaults(self):
