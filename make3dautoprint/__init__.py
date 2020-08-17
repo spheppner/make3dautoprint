@@ -24,8 +24,8 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         return dict(
             cp_queue="[]",
             cp_start_queue_automatically=False, # soll die queue zu den eingestellten Zeiten automatisch starten? (Checkbox in settings)
-            cp_start_queueing_time="0800", # -> hat derzeit noch keinen effekt (ist eines der issues)
-            cp_stop_queueing_time="2100", # -> hat derzeit noch keinen effekt (ist eines der issues)
+            cp_start_queueing_time=0800, # -> hat derzeit noch keinen effekt (ist eines der issues)
+            cp_stop_queueing_time=2100, # -> hat derzeit noch keinen effekt (ist eines der issues)
             cp_queue_finished="M18 ; disable steppers\nM104 T0 S0 ; extruder heater off\nM140 S0 ; heated bed heater off\nM300 S880 P300 ; beep to show its finished"
         )
 
