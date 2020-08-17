@@ -50,7 +50,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
             queue = json.loads(self._settings.get(["cp_queue"]))
             self._logger.info("File removed")
             for queue_item in queue:
-                if payload["path"] == queue_item["path"]
+                if payload["path"] == queue_item["path"]:
                     queue.pop(queue.index(queue_item))
             self._settings.set(["cp_queue"], json.dumps(queue))
             self._settings.save()
