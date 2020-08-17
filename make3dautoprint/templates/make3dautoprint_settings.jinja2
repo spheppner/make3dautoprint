@@ -1,5 +1,4 @@
-<h4>Continuous Print Settings</h4>
-<form class="form-horizontal">
+<h4>Make3D AutoPrint Settings</h4>
 	<p>
 		There is a special [PAUSE] command that doesn't get sent to the printer but instead indefinatly pauses the queue until the resume button is pressed.<br />
 		<small style="font-size: 0.8em"><b>Note:</b> this doesn't put the printer into a paused state it simply tells the queue to wait.</small>
@@ -14,9 +13,23 @@
     <br>
     <br>
     <div class="control-group">
-        <label class="control-label">Start prints automatically</label>
+        <label class="control-label">Start queue automatically</label>
         <div class="controls">
             <input type="checkbox" style="margin-top: -2px; margin-right: 5px;" data-bind="checked: settings.plugins.make3dautoprint.cp_start_queue_automatically"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Time to start queue automatically</label>
+        <small style="font-size: 0.8em"><b>Note:</b> please use format: 0800 for 08:00 and 2400 for 24:00</small>
+        <div class="controls">
+            <input class="input-mini text-right" type="number" data-bind="value: settings.plugins.make3autoprint.cp_start_queueing_time, enable: settings.plugins.make3dautoprint.cp_start_queue_automatically"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Time to stop queue automatically</label>
+        <small style="font-size: 0.8em"><b>Note:</b> please use format: 0800 for 08:00 and 2400 for 24:00</small>
+        <div class="controls">
+            <input class="input-mini text-right" type="number" data-bind="value: settings.plugins.make3autoprint.cp_stop_queueing_time, enable: settings.plugins.make3dautoprint.cp_start_queue_automatically"/>
         </div>
     </div>
 </form>
