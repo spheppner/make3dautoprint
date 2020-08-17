@@ -45,7 +45,17 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         if event == Events.PRINT_DONE:
             if self.enabled == True:
                 self.complete_print(payload)
-                
+        
+        if event == Events.FILE_REMOVED:
+			queue = json.loads(self._settings.get(["cp_queue"]))
+			self._logger.info("File removed")
+			for queue_item in queue:
+				if payload["path"] == queue_item["path"]
+					queue.pop(queue.index(queue_item))
+			self._settings.set(["cp_queue"], json.dumps(queue))
+            self._settings.save()
+            self._plugin_manager.send_plugin_message(self._identifier, dict(type="reload", msg=""))
+            
         if event == Events.UPLOAD:
             self._logger.info("Upload Event detected")
             if payload["name"].split(".")[len(payload["name"].split("."))-2][-4:] == "make": # wenn upload detected -> wenn vor dem *.gcode "make" steht -> self.auto_add_queue()
@@ -85,7 +95,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
             ))
             
             # Clear down the bed
-            #self.clear_bed()
+            #self.after_print()
             
             # Tell the UI to reload
             self._plugin_manager.send_plugin_message(self._identifier, dict(type="reload", msg=""))
@@ -102,7 +112,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
                 script.append(x)
         return script;
 
-    def clear_bed(self):
+    def after_print(self):
         self._logger.info("Print finished! Is print ok?")
         
         self._plugin_manager.send_plugin_message(self._identifier, dict(type="popup", msg="Starting print: " + queue[0]["name"]))
