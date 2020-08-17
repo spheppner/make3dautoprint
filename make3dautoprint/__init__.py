@@ -251,11 +251,30 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         return dict(
             js=["js/make3dautoprint.js"]
         )
+	def get_update_information(self):
+		return dict(
+			make3dautoprint=dict(
+				displayName="Make3D AutoPrint Plugin",
+				displayVersion=self._plugin_version,
+
+				type="github_release",
+				user="spheppner",
+				repo="make3dautoprint",
+				current=self._plugin_version,
+
+				pip="https://github.com/spheppner/make3dautoprint/archive/{target_version}.zip"
+			)
+		)
+
 
 __plugin_name__ = "Make3D AutoPrint Plugin"
 __plugin_pythoncompat__ = ">=2.7,<4" # python 2 and 3
 
 def __plugin_load__():
-    global __plugin_implementation__
-    __plugin_implementation__ = Make3dAutoPrintPlugin()
+	global __plugin_implementation__
+	__plugin_implementation__ = Make3dAutoPrintPlugin()
 
+	global __plugin_hooks__
+	__plugin_hooks__ = {
+		"octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information
+	}
