@@ -23,8 +23,8 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
     def get_settings_defaults(self):
         return dict(
             cp_queue="[]",
-            cp_start_queueing_time="0800",
-            cp_stop_queueing_time="2100",
+            cp_start_queueing_time="0800", # -> hat derzeit noch keinen effekt (ist eines der issues)
+            cp_stop_queueing_time="2100", # -> hat derzeit noch keinen effekt (ist eines der issues)
             cp_queue_finished="M18 ; disable steppers\nM104 T0 S0 ; extruder heater off\nM140 S0 ; heated bed heater off\nM300 S880 P300 ; beep to show its finished"
         )
 
@@ -34,7 +34,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
     ##~~ StartupPlugin mixin
     def on_after_startup(self):
         self._logger.info("Make3D AutoPrint Plugin initialized!")
-    
+		# plugin hat gestartet
     
     
     
@@ -48,7 +48,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
                 
         if event == Events.UPLOAD:
             self._logger.info("Upload Event detected")
-            if payload["name"].split(".")[len(payload["name"].split("."))-2][-4:] == "make":
+            if payload["name"].split(".")[len(payload["name"].split("."))-2][-4:] == "make": # wenn upload detected -> wenn vor dem *.gcode "make" steht -> self.auto_add_queue()
                 self._logger.info("make in name detected")
                 self.auto_add_queue(False, payload)
         
@@ -194,7 +194,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         self._settings.set(["cp_queue"], json.dumps(queue))
         self._settings.save()
         self._logger.info("Automatic Add worked!")
-        urllib.urlopen('http://octopi.local/plugin/make3dautoprint/static/js/make3dautoprint.js')
+        self._plugin_manager.send_plugin_message(self._identifier, dict(type="reload", msg=""))
     
     @octoprint.plugin.BlueprintPlugin.route("/removequeue", methods=["DELETE"])
     @restricted_access
