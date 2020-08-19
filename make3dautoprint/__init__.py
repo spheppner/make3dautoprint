@@ -43,15 +43,19 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         while True:
             sqt = json.loads(self._settings.get(["cp_start_queueing_time"]))
             stqt = json.loads(self._settings.get(["cp_stop_queueing_time"]))
-            if json.loads(self._settings.get(["cp_start_queue_automatically"])):
+            stqa = json.loads(self._settings.get(["cp_start_queue_automatically"]))
+            if stqa:
                 if len(json.loads(self._settings.get(["cp_queue"]))) > 0:
                     tempt = datetime.datetime.now().split(":")
                     t = str(tempt[0]) + str(tempt[1])   
-                    if t >= sqt:
-                        if Make3dAutoPrintPlugin.paused == True:
+                    if t >= int(sqt) and t < int(stqt):
+                        if self.paused == True:
                             self.resume_queue()
                         else:
                             self.start_queue()
+                    else:
+                        if self.paused == False:
+                            self.paused = True
     
     ##~~ Event hook
     def on_event(self, event, payload):
@@ -286,7 +290,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
 
 
 __plugin_name__ = "Make3D AutoPrint Plugin"
-__plugin_version__ = "1.0.5"
+__plugin_version__ = "1.0.4"
 __plugin_pythoncompat__ = ">=2.7,<4" # python 2 and 3
 
 def __plugin_load__():
