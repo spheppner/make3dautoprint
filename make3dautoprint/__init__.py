@@ -33,10 +33,18 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
 
     ##~~ StartupPlugin mixin
     def on_after_startup(self):
-        self._logger.info("Make3D AutoPrint Plugin initialized!")
+        self._logger.info("Make3D AutoPrint Plugin initialized!, Starting Loop for Time Window")
+        self.timeWindowCheck()
+        self._logger.info("I am outside the loop!")
+        if self.timewindowchecking:
+			self._logger.info("Checking Window!")
         # plugin hat gestartet
     
-    
+    def timeWindowCheck(self):
+		while True:
+			if json.loads(self._settings.get(["cp_start_queue_automatically"])):
+				self.timewindowchecking = True
+				
     
     ##~~ Event hook
     def on_event(self, event, payload):
