@@ -261,7 +261,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
                 repo="make3dautoprint",
                 current=self._plugin_version,
 
-                pip="https://github.com/spheppner/make3dautoprint/archive/master.zip"
+                pip="https://github.com/spheppner/make3dautoprint/archive/{target_version}.zip"
             )
         )
 
