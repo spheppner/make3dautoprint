@@ -5,7 +5,8 @@ import octoprint.plugin
 import flask, json
 from octoprint.server.util.flask import restricted_access
 from octoprint.events import eventManager, Events
-import urllib
+import datetime
+import threading
 
 class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
                             octoprint.plugin.TemplatePlugin,
@@ -34,17 +35,23 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
     ##~~ StartupPlugin mixin
     def on_after_startup(self):
         self._logger.info("Make3D AutoPrint Plugin initialized!, Starting Loop for Time Window")
-        self.timeWindowCheck()
-        self._logger.info("I am outside the loop!")
-        if self.timewindowchecking:
-			self._logger.info("Checking Window!")
+        x = threading.Thread(target=self.timeWindowCheck)
+        x.start()
         # plugin hat gestartet
     
     def timeWindowCheck(self):
-		while True:
-			if json.loads(self._settings.get(["cp_start_queue_automatically"])):
-				self.timewindowchecking = True
-				
+        while True:
+            sqt = json.loads(self._settings.get(["cp_start_queueing_time"]))
+            stqt = json.loads(self._settings.get(["cp_stop_queueing_time"]))
+            if json.loads(self._settings.get(["cp_start_queue_automatically"])):
+                if len(json.loads(self._settings.get(["cp_queue"]))) > 0:
+                    tempt = datetime.datetime.now().split(":")
+                    t = str(tempt[0]) + str(tempt[1])   
+                    if t >= sqt:
+                        if Make3dAutoPrintPlugin.paused == True:
+                            self.resume_queue()
+                        else:
+                            self.start_queue()
     
     ##~~ Event hook
     def on_event(self, event, payload):
