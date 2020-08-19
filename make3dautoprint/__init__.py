@@ -286,7 +286,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
 
 
 __plugin_name__ = "Make3D AutoPrint Plugin"
-__plugin_version__ = "1.0.4"
+__plugin_version__ = "1.0.5"
 __plugin_pythoncompat__ = ">=2.7,<4" # python 2 and 3
 
 def __plugin_load__():
