@@ -250,17 +250,21 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         return dict(
             js=["js/make3dautoprint.js"]
         )
+        
+    ##~~ Softwareupdate hook
     def get_update_information(self):
         return dict(
             make3dautoprint=dict(
                 displayName="Make3D AutoPrint Plugin",
                 displayVersion=self._plugin_version,
 
+                # version check: github repository
                 type="github_release",
                 user="spheppner",
                 repo="make3dautoprint",
                 current=self._plugin_version,
 
+                # update method: pip w/ dependency links
                 pip="https://github.com/spheppner/make3dautoprint/archive/{target_version}.zip"
             )
         )
