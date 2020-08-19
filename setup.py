@@ -14,7 +14,7 @@ plugin_package = "make3dautoprint"
 plugin_name = "make3dautoprint"
 
 # The plugin's version. Can be overwritten within OctoPrint's internal data via __plugin_version__ in the plugin module
-plugin_version = "1.0.4"
+plugin_version = "1.0.5"
 
 # The plugin's description. Can be overwritten within OctoPrint's internal data via __plugin_description__ in the plugin
 # module
