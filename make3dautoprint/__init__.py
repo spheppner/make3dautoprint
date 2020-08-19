@@ -51,7 +51,8 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
                     if t >= int(sqt) and t < int(stqt):
                         if self.paused == True:
                             self.resume_queue()
-                        else:
+                        elif self.enabled == False:
+                            self._logger.info("Started Print - I am in time!")
                             self.start_queue()
                     else:
                         if self.paused == False:
