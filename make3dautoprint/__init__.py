@@ -47,7 +47,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
             stqa = json.loads(self._settings.get(["cp_start_queue_automatically"]))
             if stqa:
                 if len(json.loads(self._settings.get(["cp_queue"]))) > 0:
-                    tempt = datetime.datetime.now().split(":")
+                    tempt = str(datetime.datetime.now()).split(":")
                     t = str(tempt[0]) + str(tempt[1])   
                     if t >= int(sqt) and t < int(stqt):
                         if self.paused is True:
