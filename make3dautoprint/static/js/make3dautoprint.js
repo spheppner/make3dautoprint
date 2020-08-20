@@ -228,7 +228,49 @@ $(function() {
 				data: {}
 			});
 		}
-
+		
+		self.printOK = function() {
+			$("#print_finished_dialog").modal("hide");
+			$("#print_again_dialog").modal("hide");
+			$("#take_print_dialog").modal("show");
+		}
+		self.printNotOK = function() {
+			$("#print_finished_dialog").modal("hide");
+			$("#take_print_dialog").modal("hide");
+			$("#print_again_dialog").modal("show");
+		}
+		self.printAgain = function() {
+			$("#print_finished_dialog").modal("hide");
+			$("#print_again_dialog").modal("hide");
+			$("#take_print_dialog").modal("show");
+			
+			$.ajax({
+				url: "plugin/make3dautoprint/printAgainFunc?pa=1",
+				type: "GET",
+				dataType: "json",
+				headers: {"X-Api-Key":UI_API_KEY},
+			});
+			
+		}
+		self.printNotAgain = function() {
+			$("#print_finished_dialog").modal("hide");
+			$("#print_again_dialog").modal("hide");
+			$("#take_print_dialog").modal("show");
+			
+			$.ajax({
+				url: "plugin/make3dautoprint/printAgainFunc?pa=0",
+				type: "GET",
+				dataType: "json",
+				headers: {"X-Api-Key":UI_API_KEY},
+			});
+			
+		}
+		self.printFinishedDialogDone = function() {
+			$("#print_finished_dialog").modal("hide");
+			$("#print_again_dialog").modal("hide");
+			$("#take_print_dialog").modal("hide");
+		}
+		
 		self.onDataUpdaterPluginMessage = function(plugin, data) {
 			if (plugin != "make3dautoprint") return;
 
@@ -255,11 +297,11 @@ $(function() {
 				case "updatefiles":
 					self.getFileList();
 					break;
-				case "loadDialog":
-					$("#gcode_edit_dialog").modal("show");
+				case "showDialog":
+					$("#print_finished_dialog").modal("show");
 					break;
 				case "hideDialog":
-					$("#gcode_edit_dialog").modal("hide");
+					$("#print_finished_dialog").modal("hide");
 					break;
 			}
 			
