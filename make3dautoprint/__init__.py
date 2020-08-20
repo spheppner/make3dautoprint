@@ -18,6 +18,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
     print_history = []
     enabled = False
     paused = False
+    printAgain = False
 
     ##~~ SettingsPlugin mixin
     def get_settings_defaults(self):
@@ -49,13 +50,13 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
                     tempt = datetime.datetime.now().split(":")
                     t = str(tempt[0]) + str(tempt[1])   
                     if t >= int(sqt) and t < int(stqt):
-                        if self.paused == True:
+                        if self.paused is True:
                             self.resume_queue()
-                        elif self.enabled == False:
+                        elif self.enabled is False:
                             self._logger.info("Started Print - I am in time!")
                             self.start_queue()
                     else:
-                        if self.paused == False:
+                        if self.paused is False:
                             self.paused = True
     
     ##~~ Event hook
@@ -63,7 +64,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         from octoprint.events import Events
         ##  Print complete check it was the print in the bottom of the queue and not just any print
         if event == Events.PRINT_DONE:
-            if self.enabled == True:
+            if self.enabled is True:
                 self.complete_print(payload)
         
         if event == "FileRemoved":
@@ -103,22 +104,23 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
     def complete_print(self, payload):
         queue = json.loads(self._settings.get(["cp_queue"]))
         if payload["path"]==queue[0]["path"]:
-            # Remove the print from the queue
-            queue.pop(0)
-            self._settings.set(["cp_queue"], json.dumps(queue))
-            self._settings.save()
             
-            # Add to the history
-            self.print_history.append(dict(
-                name = payload["name"],
-                time = payload["time"]
-            ))
+            self.after_print()
             
-            # Clear down the bed
-            #self.after_print()
-            
-            # Tell the UI to reload
-            self._plugin_manager.send_plugin_message(self._identifier, dict(type="reload", msg=""))
+            if self.printAgain is False:
+                # Remove the print from the queue
+                queue.pop(0)
+                self._settings.set(["cp_queue"], json.dumps(queue))
+                self._settings.save()
+                
+                # Add to the history
+                self.print_history.append(dict(
+                    name = payload["name"],
+                    time = payload["time"]
+                ))
+                
+                # Tell the UI to reload
+                self._plugin_manager.send_plugin_message(self._identifier, dict(type="reload", msg="")) 
         else:
             enabled = False
 
@@ -134,8 +136,16 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
 
     def after_print(self):
         self._logger.info("Print finished! Is print ok?")
-        
-        self._plugin_manager.send_plugin_message(self._identifier, dict(type="popup", msg="Starting print: " + queue[0]["name"]))
+        self._plugin_manager.send_plugin_message(self._identifier, dict(type="showDialog", msg=""))
+    
+    @octoprint.plugin.BlueprintPlugin.route("/printAgainFunc", methods=["GET"])
+    @restricted_access
+    def printAgainFunc(self):
+        pa = int(flask.request.args.get("pa", 0))
+        if pa == 0:
+            self.printAgain = False
+        else:
+            self.printAgain = True
         
     def complete_queue(self):
         self.enabled = False # Set enabled to false
@@ -144,7 +154,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         self._printer.commands(self.parse_gcode(queue_finished_script))
 
     def start_next_print(self):
-        if self.enabled == True and self.paused == False:
+        if self.enabled is True and self.paused is False:
             queue = json.loads(self._settings.get(["cp_queue"]))
             if len(queue) > 0:
                 self._plugin_manager.send_plugin_message(self._identifier, dict(type="popup", msg="Starting print: " + queue[0]["name"]))
