@@ -255,6 +255,12 @@ $(function() {
 				case "updatefiles":
 					self.getFileList();
 					break;
+				case "loadDialog":
+					$("#gcode_edit_dialog").modal("show");
+					break;
+				case "hideDialog":
+					$("#gcode_edit_dialog").modal("hide");
+					break;
 			}
 			
 			if (data.msg != "") {
