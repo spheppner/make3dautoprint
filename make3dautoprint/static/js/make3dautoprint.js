@@ -230,19 +230,16 @@ $(function() {
 		}
 		
 		self.printOK = function() {
-			$("#take_print_dialog").modal("show");
 			$("#print_check_dialog").modal("hide");
+			$("#take_print_dialog").modal("show");
 			console.log("Print OK")
 		}
 		self.printNotOK = function() {
-			$("#print_check_dialog").modal("hide");
 			$("#print_again_dialog").modal("show");
+			$("#print_check_dialog").modal("hide");
 			console.log("Print NOT OK")
 		}
 		self.printAgain = function() {
-			$("#print_again_dialog").modal("hide");
-			$("#take_print_dialog").modal("show");
-			
 			$.ajax({
 				url: "plugin/make3dautoprint/printAgainFunc?pa=1",
 				type: "GET",
@@ -250,11 +247,10 @@ $(function() {
 				headers: {"X-Api-Key":UI_API_KEY},
 			});
 			
-		}
-		self.printNotAgain = function() {
 			$("#print_again_dialog").modal("hide");
 			$("#take_print_dialog").modal("show");
-			
+		}
+		self.printNotAgain = function() {
 			$.ajax({
 				url: "plugin/make3dautoprint/printAgainFunc?pa=0",
 				type: "GET",
@@ -262,6 +258,8 @@ $(function() {
 				headers: {"X-Api-Key":UI_API_KEY},
 			});
 			
+			$("#print_again_dialog").modal("hide");
+			$("#take_print_dialog").modal("show");
 		}
 		self.printFinishedDialogDone = function() {
 			$("#print_finished_dialog").modal("hide");
@@ -297,7 +295,7 @@ $(function() {
 					self.getFileList();
 					break;
 				case "showDialog":
-					$("#print_finished_dialog").modal("show");
+					// $("#print_finished_dialog").modal("show");
 					$("#print_check_dialog").modal("show");
 					break;
 				case "hideDialog":
