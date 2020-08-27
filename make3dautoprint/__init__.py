@@ -243,7 +243,10 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
     def remove_queue(self):
         queue = json.loads(self._settings.get(["cp_queue"]))
         self._logger.info(flask.request.args.get("index", 0))
-        queue.pop(int(flask.request.args.get("index", 0)))
+        index_to_remove = int(flask.request.args.get("index", 0))
+        if index_to_remove == 0 and self._printer.get_state_id() == "PRINTING":
+			return flask.make_response("success", 200)
+        queue.pop(index_to_remove)
         self._settings.set(["cp_queue"], json.dumps(queue))
         self._settings.save()
         return flask.make_response("success", 200)
