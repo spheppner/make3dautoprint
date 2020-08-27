@@ -98,6 +98,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         if event == Events.FILE_SELECTED:
             # Add some code to clear the print at the bottom
             self._logger.info("File selected")
+            self._plugin_manager.send_plugin_message(self._identifier, dict(type="showDialog", msg=""))
 
         if event == Events.UPDATED_FILES:
             self._plugin_manager.send_plugin_message(self._identifier, dict(type="updatefiles", msg=""))
