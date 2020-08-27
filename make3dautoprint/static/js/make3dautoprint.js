@@ -296,9 +296,13 @@ $(function() {
 					break;
 				case "showDialog":
 					$("#print_finished_dialog").modal("show");
+					$("#print_check_dialog").modal("show");
 					break;
 				case "hideDialog":
 					$("#print_finished_dialog").modal("hide");
+					$("#print_check_dialog").modal("hide");
+					$("#print_again_dialog").modal("hide");
+					$("#take_print_dialog").modal("hide");
 					break;
 			}
 			
