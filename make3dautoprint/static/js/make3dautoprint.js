@@ -230,17 +230,14 @@ $(function() {
 		}
 		
 		self.printOK = function() {
-			$("#print_finished_dialog").modal("hide");
-			$("#print_again_dialog").modal("hide");
+			$("#print_check_dialog").modal("hide");
 			$("#take_print_dialog").modal("show");
 		}
 		self.printNotOK = function() {
-			$("#print_finished_dialog").modal("hide");
-			$("#take_print_dialog").modal("hide");
+			$("#print_check_dialog").modal("hide");
 			$("#print_again_dialog").modal("show");
 		}
 		self.printAgain = function() {
-			$("#print_finished_dialog").modal("hide");
 			$("#print_again_dialog").modal("hide");
 			$("#take_print_dialog").modal("show");
 			
@@ -253,7 +250,6 @@ $(function() {
 			
 		}
 		self.printNotAgain = function() {
-			$("#print_finished_dialog").modal("hide");
 			$("#print_again_dialog").modal("hide");
 			$("#take_print_dialog").modal("show");
 			
@@ -267,6 +263,7 @@ $(function() {
 		}
 		self.printFinishedDialogDone = function() {
 			$("#print_finished_dialog").modal("hide");
+			$("#print_check_dialog").modal("hide");
 			$("#print_again_dialog").modal("hide");
 			$("#take_print_dialog").modal("hide");
 		}
