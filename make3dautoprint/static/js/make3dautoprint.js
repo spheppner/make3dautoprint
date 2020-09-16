@@ -232,11 +232,29 @@ $(function() {
 		self.printOK = function() {
 			$("#print_check_dialog").modal("hide");
 			$("#take_print_dialog").modal("show");
+			$.ajax({
+				url: "plugin/make3dautoprint/logprint",
+				type: "GET",
+				dataType: "json",
+				headers: {
+					"X-Api-Key":UI_API_KEY,
+				},
+				data: {}
+			});
 			console.log("Print OK");
 		}
 		self.printNotOK = function() {
 			$("#print_again_dialog").modal("show");
 			$("#print_check_dialog").modal("hide");
+			$.ajax({
+				url: "plugin/make3dautoprint/logprint",
+				type: "GET",
+				dataType: "json",
+				headers: {
+					"X-Api-Key":UI_API_KEY,
+				},
+				data: {}
+			});
 			console.log("Print NOT OK");
 		}
 		self.printAgain = function() {
