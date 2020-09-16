@@ -232,12 +232,12 @@ $(function() {
 		self.printOK = function() {
 			$("#print_check_dialog").modal("hide");
 			$("#take_print_dialog").modal("show");
-			console.log("Print OK")
+			console.log("Print OK");
 		}
 		self.printNotOK = function() {
 			$("#print_again_dialog").modal("show");
 			$("#print_check_dialog").modal("hide");
-			console.log("Print NOT OK")
+			console.log("Print NOT OK");
 		}
 		self.printAgain = function() {
 			$.ajax({
