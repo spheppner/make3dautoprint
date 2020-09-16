@@ -266,6 +266,12 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         self.paused = False
         self.start_next_print()
         return flask.make_response("success", 200)
+        
+    @octoprint.plugin.BlueprintPlugin.route("/logprint", methods=["GET"])
+    @restricted_access
+    def resume_queue(self):
+        self._logger.info("----- Print Button pressed -----")
+        return flask.make_response("success", 200)
 
     ##~~  TemplatePlugin
     def get_template_vars(self):
