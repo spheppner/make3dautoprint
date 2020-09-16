@@ -39,7 +39,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         x = threading.Thread(target=self.timeWindowCheck)
         x.start()
         # plugin hat gestartet
-    
+
     def timeWindowCheck(self):
         while True:
             sqt = json.loads(self._settings.get(["cp_start_queueing_time"]))
@@ -49,7 +49,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
             if stqa:
                 if len(queue) > 0:
                     tempt = str(datetime.datetime.now()).split(":")
-                    t = str(tempt[0]) + str(tempt[1])   
+                    t = str(tempt[0]) + str(tempt[1])
                     if t >= int(sqt) and t < int(stqt):
                         if self.paused is True:
                             self.resume_queue()
@@ -59,7 +59,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
                     else:
                         if self.paused is False:
                             self.paused = True
-    
+
     ##~~ Event hook
     def on_event(self, event, payload):
         from octoprint.events import Events
@@ -67,7 +67,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         if event == Events.PRINT_DONE:
             if self.enabled is True:
                 self.complete_print(payload)
-        
+
         if event == "FileRemoved":
             queue = json.loads(self._settings.get(["cp_queue"]))
             self._logger.info("File removed")
@@ -77,24 +77,24 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
             self._settings.set(["cp_queue"], json.dumps(queue))
             self._settings.save()
             self._plugin_manager.send_plugin_message(self._identifier, dict(type="reload", msg=""))
-            
+
         if event == Events.UPLOAD:
             self._logger.info("Upload Event detected")
             if payload["name"].split(".")[len(payload["name"].split("."))-2][-4:] == "make": # wenn upload detected -> wenn vor dem *.gcode "make" steht -> self.auto_add_queue()
                 self._logger.info("make in name detected")
                 self.auto_add_queue(False, payload)
-        
+
         # On fail stop all prints
         if event == Events.PRINT_FAILED or event == Events.PRINT_CANCELLED:
             self.enabled = False # Set enabled to false
             self._plugin_manager.send_plugin_message(self._identifier, dict(type="error", msg="Print queue cancelled"))
-        
+
         if event == Events.PRINTER_STATE_CHANGED:
             # If the printer is operational and the last print succeeded then we start next print
             state = self._printer.get_state_id()
             if state  == "OPERATIONAL":
                 self.start_next_print()
-        
+
         if event == Events.FILE_SELECTED:
             # Add some code to clear the print at the bottom
             self._logger.info("File selected")
@@ -106,23 +106,23 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
     def complete_print(self, payload):
         queue = json.loads(self._settings.get(["cp_queue"]))
         if payload["path"]==queue[0]["path"]:
-            
+
             self.after_print()
-            
+
             if self.printAgain is False:
                 # Remove the print from the queue
                 queue.pop(0)
                 self._settings.set(["cp_queue"], json.dumps(queue))
                 self._settings.save()
-                
+
                 # Add to the history
                 self.print_history.append(dict(
                     name = payload["name"],
                     time = payload["time"]
                 ))
-                
+
                 # Tell the UI to reload
-                self._plugin_manager.send_plugin_message(self._identifier, dict(type="reload", msg="")) 
+                self._plugin_manager.send_plugin_message(self._identifier, dict(type="reload", msg=""))
         else:
             enabled = False
 
@@ -139,7 +139,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
     def after_print(self):
         self._logger.info("Print finished! Is print ok?")
         self._plugin_manager.send_plugin_message(self._identifier, dict(type="showDialog", msg=""))
-    
+
     @octoprint.plugin.BlueprintPlugin.route("/printAgainFunc", methods=["GET"])
     @restricted_access
     def printAgainFunc(self):
@@ -148,7 +148,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
             self.printAgain = False
         else:
             self.printAgain = True
-        
+
     def complete_queue(self):
         self.enabled = False # Set enabled to false
         self._plugin_manager.send_plugin_message(self._identifier, dict(type="complete", msg="Print Queue Complete"))
@@ -161,7 +161,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
             if len(queue) > 0:
                 self._plugin_manager.send_plugin_message(self._identifier, dict(type="popup", msg="Starting print: " + queue[0]["name"]))
                 self._plugin_manager.send_plugin_message(self._identifier, dict(type="reload", msg=""))
-                
+
                 sd = False
                 if queue[0]["sd"] == "true":
                     sd = True
@@ -175,19 +175,19 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
                     self._plugin_manager.send_plugin_message(self._identifier, dict(type="popup", msg="ERROR file not gcode"))
             else:
                 self.complete_queue()
-            
-            
+
+
     ##~~ APIs
     @octoprint.plugin.BlueprintPlugin.route("/queue", methods=["GET"])
     @restricted_access
     def get_queue(self):
         queue = json.loads(self._settings.get(["cp_queue"]))
-        
+
         for x in self.print_history:
             queue.append(x)
-        
+
         return flask.jsonify(queue=queue)
-        
+
     @octoprint.plugin.BlueprintPlugin.route("/queueup", methods=["GET"])
     @restricted_access
     def queue_up(self):
@@ -195,11 +195,11 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         queue = json.loads(self._settings.get(["cp_queue"]))
         orig = queue[index]
         queue[index] = queue[index-1]
-        queue[index-1] = orig   
+        queue[index-1] = orig
         self._settings.set(["cp_queue"], json.dumps(queue))
         self._settings.save()
         return flask.jsonify(queue=queue)
-        
+
     @octoprint.plugin.BlueprintPlugin.route("/queuedown", methods=["GET"])
     @restricted_access
     def queue_down(self):
@@ -207,11 +207,11 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         queue = json.loads(self._settings.get(["cp_queue"]))
         orig = queue[index]
         queue[index] = queue[index+1]
-        queue[index+1] = orig   
+        queue[index+1] = orig
         self._settings.set(["cp_queue"], json.dumps(queue))
-        self._settings.save()       
+        self._settings.save()
         return flask.jsonify(queue=queue)
-            
+
     @octoprint.plugin.BlueprintPlugin.route("/addqueue", methods=["POST"])
     @restricted_access
     def add_queue(self):
@@ -237,7 +237,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         self._settings.save()
         self._logger.info("Automatic Add worked!")
         self._plugin_manager.send_plugin_message(self._identifier, dict(type="reload", msg=""))
-    
+
     @octoprint.plugin.BlueprintPlugin.route("/removequeue", methods=["DELETE"])
     @restricted_access
     def remove_queue(self):
@@ -245,12 +245,12 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         self._logger.info(flask.request.args.get("index", 0))
         index_to_remove = int(flask.request.args.get("index", 0))
         if index_to_remove == 0 and self._printer.get_state_id() == "PRINTING":
-			return flask.make_response("success", 200)
+            return flask.make_response("success", 200)
         queue.pop(index_to_remove)
         self._settings.set(["cp_queue"], json.dumps(queue))
         self._settings.save()
         return flask.make_response("success", 200)
-    
+
     @octoprint.plugin.BlueprintPlugin.route("/startqueue", methods=["GET"])
     @restricted_access
     def start_queue(self):
@@ -259,14 +259,14 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         self.enabled = True # Set enabled to true
         self.start_next_print()
         return flask.make_response("success", 200)
-    
+
     @octoprint.plugin.BlueprintPlugin.route("/resumequeue", methods=["GET"])
     @restricted_access
     def resume_queue(self):
         self.paused = False
         self.start_next_print()
         return flask.make_response("success", 200)
-    
+
     ##~~  TemplatePlugin
     def get_template_vars(self):
         return dict(
@@ -285,7 +285,7 @@ class Make3dAutoPrintPlugin(octoprint.plugin.SettingsPlugin,
         return dict(
             js=["js/make3dautoprint.js"]
         )
-        
+
     ##~~ Softwareupdate hook
     def get_update_information(self):
         return dict(
